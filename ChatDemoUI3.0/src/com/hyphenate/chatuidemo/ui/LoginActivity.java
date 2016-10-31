@@ -32,6 +32,7 @@ import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
+import com.hyphenate.chatuidemo.views.DisplayUtils;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 /**
@@ -43,14 +44,14 @@ public class LoginActivity extends BaseActivity {
 	public static final int REQUEST_CODE_SETNICK = 1;
 	private EditText usernameEditText;
 	private EditText passwordEditText;
-
+	LoginActivity mContext;
 	private boolean progressShow;
 	private boolean autoLogin = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		mContext = this;
 		// enter the main activity if already logged in
 		if (DemoHelper.getInstance().isLoggedIn()) {
 			autoLogin = true;
@@ -59,6 +60,7 @@ public class LoginActivity extends BaseActivity {
 			return;
 		}
 		setContentView(R.layout.em_activity_login);
+		DisplayUtils.initBackWithTitle(mContext,String.valueOf(R.string.login));
 
 		usernameEditText = (EditText) findViewById(R.id.username);
 		passwordEditText = (EditText) findViewById(R.id.password);
@@ -185,15 +187,6 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	
-	/**
-	 * register
-	 * 
-	 * @param view
-	 */
-	public void register(View view) {
-		startActivityForResult(new Intent(this, RegisterActivity.class), 0);
-	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();
