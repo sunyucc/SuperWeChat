@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.ucai.superwechat.bean.Result;
-import cn.ucai.superwechat.widget.I;
+import cn.ucai.superwechat.I;
 
 /**
  * Created by clawpo on 2016/9/21.

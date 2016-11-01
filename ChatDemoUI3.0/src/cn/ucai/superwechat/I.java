@@ -1,4 +1,4 @@
-package cn.ucai.superwechat.widget;
+package cn.ucai.superwechat;
 
 public interface I {
 
