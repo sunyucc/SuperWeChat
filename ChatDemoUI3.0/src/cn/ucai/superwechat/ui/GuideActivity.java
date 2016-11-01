@@ -10,29 +10,31 @@ import cn.ucai.superwechat.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.ucai.superwechat.utils.MFGT;
 
-public class GuideActivity extends Activity {
+public class GuideActivity extends BaseActivity {
 
     @BindView(R.id.tv_login)
     TextView tvLogin;
     @BindView(R.id.tv_register)
     TextView tvRegister;
-
+    GuideActivity mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide);
         ButterKnife.bind(this);
+        mContext = this;
     }
 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_login:
-                startActivity(new Intent(GuideActivity.this,LoginActivity.class));
+                MFGT.gotoLogin(mContext);
                 finish();
                 break;
             case R.id.tv_register:
-                startActivity(new Intent(GuideActivity.this,RegisterActivity.class));
+                MFGT.gotoRegister(mContext);
                 finish();
                 break;
         }
