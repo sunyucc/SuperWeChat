@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.domain.User;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import butterknife.BindView;
@@ -38,11 +39,15 @@ import butterknife.OnClick;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatApplication;
 import cn.ucai.superwechat.SuperWeChatHelper;
+import cn.ucai.superwechat.bean.Result;
 import cn.ucai.superwechat.data.NetDao;
 import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.db.SuperWeChatDBManager;
+import cn.ucai.superwechat.db.UserDao;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.MD5;
 import cn.ucai.superwechat.utils.MFGT;
+import cn.ucai.superwechat.utils.ResultUtils;
 
 /**
  * Login screen
@@ -63,7 +68,8 @@ public class LoginActivity extends BaseActivity {
     private boolean autoLogin = false;
     String currentUsername;
     String currentPassword;
-     ProgressDialog pd= null;
+    ProgressDialog pd = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,9 +197,21 @@ public class LoginActivity extends BaseActivity {
     private void loginAppService() {
         NetDao.login(mContext, currentUsername, currentPassword, new OkHttpUtils.OnCompleteListener<String>() {
             @Override
-            public void onSuccess(String result) {
-                loginSuccess();
-                pd.dismiss();
+            public void onSuccess(String s) {
+                if (s != null && s != "") {
+                    Result result = ResultUtils.getListResultFromJson(s, User.class);
+                    if (result != null && result.isRetMsg()) {
+                        User user = (User) result.getRetData();
+                        if (user != null) {
+                            UserDao dao = new UserDao(mContext);
+                            dao.saveUser(user);
+                            SuperWeChatHelper.getInstance().setCurrentUser(user);
+                            loginSuccess();
+                        }
+                    } else {
+                        pd.dismiss();
+                    }
+                }
             }
 
             @Override
@@ -207,7 +225,7 @@ public class LoginActivity extends BaseActivity {
         // ** manually load all local groups and conversation
         EMClient.getInstance().groupManager().loadAllGroups();
         EMClient.getInstance().chatManager().loadAllConversations();
-
+        L.e(TAG, R.string.login_success+"");
         // update current user's display name for APNs
         boolean updatenick = EMClient.getInstance().updateCurrentUserNick(
                 SuperWeChatApplication.currentUserNick.trim());
@@ -252,5 +270,11 @@ public class LoginActivity extends BaseActivity {
                 login();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        pd.dismiss();
+        super.onDestroy();
     }
 }
