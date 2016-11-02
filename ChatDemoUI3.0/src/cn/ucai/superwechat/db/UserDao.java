@@ -13,13 +13,14 @@
  */
 package cn.ucai.superwechat.db;
 
+import android.content.Context;
+
+import com.hyphenate.easeui.domain.EaseUser;
+
 import java.util.List;
 import java.util.Map;
 
-import android.content.Context;
-
 import cn.ucai.superwechat.domain.RobotUser;
-import com.hyphenate.easeui.domain.EaseUser;
 
 public class UserDao {
 	public static final String TABLE_NAME = "uers";
@@ -35,8 +36,8 @@ public class UserDao {
 	public static final String ROBOT_COLUMN_NAME_ID = "username";
 	public static final String ROBOT_COLUMN_NAME_NICK = "nick";
 	public static final String ROBOT_COLUMN_NAME_AVATAR = "avatar";
-	
-	
+
+
 	public UserDao(Context context) {
 	}
 
