@@ -2,7 +2,6 @@ package com.hyphenate.easeui.domain;
 
 import java.io.Serializable;
 
-import cn.ucai.superwechat.utils.UserUtils;
 
 public class User implements Serializable {
 	private String muserName;
@@ -94,12 +93,12 @@ public class User implements Serializable {
 		return mavatarSuffix;
 	}
 
-	public String getInitialLetter() {
-		if(initialLetter == null){
-			UserUtils.setUserInitialLetter(this);
-		}
-		return initialLetter;
-	}
+//	public String getInitialLetter() {
+//		if(initialLetter == null){
+//			UserUtils.setUserInitialLetter(this);
+//		}
+//		return initialLetter;
+//	}
 
 	public void setInitialLetter(String initialLetter) {
 		this.initialLetter = initialLetter;

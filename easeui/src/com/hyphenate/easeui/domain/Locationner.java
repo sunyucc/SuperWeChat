@@ -2,7 +2,7 @@ package com.hyphenate.easeui.domain;
 
 import java.io.Serializable;
 
-public class Locationner extends UserAvatar implements Serializable{
+public class Locationner extends User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private Integer mlocationId;
 	private Double mlocationLatitude;

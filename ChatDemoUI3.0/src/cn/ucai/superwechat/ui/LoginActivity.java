@@ -217,6 +217,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onError(String error) {
                 pd.dismiss();
+                L.e(TAG,error);
             }
         });
     }

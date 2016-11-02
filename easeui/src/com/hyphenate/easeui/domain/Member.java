@@ -2,7 +2,7 @@ package com.hyphenate.easeui.domain;
 
 import java.io.Serializable;
 
-public class Member extends UserAvatar implements Serializable {
+public class Member extends User implements Serializable {
 	private Integer mmemberId;
 	private Integer mmemberGroupId;
 	private String mmemberGroupHxid;
