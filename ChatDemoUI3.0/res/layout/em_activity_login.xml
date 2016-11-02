@@ -5,7 +5,7 @@
     android:background="#eff2f6"
     android:orientation="vertical" >
 
-    <include layout="@layout/item_title_head" />
+    <include layout="@layout/view_layout_title" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -83,6 +83,7 @@
             android:layout_marginTop="30dp"
             android:orientation="horizontal" >
             <Button
+                android:id="@+id/btn_login"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
