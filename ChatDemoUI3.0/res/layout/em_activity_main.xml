@@ -4,73 +4,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/common_bg">
-    <include
-        android:id="@+id/layout_title"
-        layout="@layout/view_layout_title" />
+    android:layout_height="match_parent">
+
+    <include android:id="@+id/layout_title" layout="@layout/view_layout_title"/>
     <cn.ucai.superwechat.widget.MFViewPager
         android:id="@+id/layout_viewpage"
         android:layout_below="@id/layout_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:paddingBottom="48dp">
     </cn.ucai.superwechat.widget.MFViewPager>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true">
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#D4DCDC" />
-
+            android:background="#D6DCDC"/>
         <cn.ucai.superwechat.widget.DMTabHost
+            android:id="@+id/layout_tabhost"
             android:layout_width="match_parent"
             android:layout_height="47dp"
-            android:orientation="horizontal">
+            android:paddingBottom="1dp">
             <cn.ucai.superwechat.widget.DMTabButton
-                android:id="@+id/btn_weixin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/tab_weixin"
-                app:tabtext="@string/app_name"
-                android:onClick="onTabClicked">
+                app:drawableTop="@drawable/tab_weixin"
+                app:tabtext="@string/app_name">
             </cn.ucai.superwechat.widget.DMTabButton>
             <cn.ucai.superwechat.widget.DMTabButton
-                android:id="@+id/btn_contact"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/tab_contact_list"
-                app:tabtext="@string/contacts"
-                android:onClick="onTabClicked">
+                app:drawableTop="@drawable/tab_contact_list"
+                app:tabtext="@string/contacts">
             </cn.ucai.superwechat.widget.DMTabButton>
             <cn.ucai.superwechat.widget.DMTabButton
-                android:id="@+id/btn_discover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/tab_find"
-                app:tabtext="@string/discover"
-                android:onClick="onTabClicked">
+                app:drawableTop="@drawable/tab_find"
+                app:tabtext="@string/discover">
             </cn.ucai.superwechat.widget.DMTabButton>
             <cn.ucai.superwechat.widget.DMTabButton
-                android:id="@+id/btn_me"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/tab_profile"
-                app:tabtext="@string/prompt"
-                android:onClick="onTabClicked">
-
+                app:drawableTop="@drawable/tab_profile"
+                app:tabtext="@string/me">
             </cn.ucai.superwechat.widget.DMTabButton>
         </cn.ucai.superwechat.widget.DMTabHost>
     </LinearLayout>
-
-
 </RelativeLayout>
