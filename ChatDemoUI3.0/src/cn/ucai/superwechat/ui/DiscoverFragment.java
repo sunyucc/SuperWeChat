@@ -11,11 +11,11 @@ import cn.ucai.superwechat.R;
 /**
  * Created by clawpo on 2016/9/22.
  */
-public class DicoverFragment extends Fragment {
+public class DiscoverFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dicover, container, false);
+        return inflater.inflate(R.layout.fragment_discover, container, false);
     }
 
 //    //朋友圈点击事件
