@@ -103,6 +103,7 @@
     <string name="setting_txt_tongyong">通用</string>
     <string name="setting_txt_about">关于微信</string>
     <string name="setting_btn_exit">退出登录</string>
+
     <!--消息码-->
     <string name="msg_101">msg register username exists</string>
     <string name="msg_102">msg register fail</string>
@@ -142,5 +143,4 @@
     <string name="msg_501">msg location get fail</string>
     <string name="msg_999">msg unknow</string>
     <string name="msg_1">msg illegal request</string>
-    <string name="login_success">login success</string>
 </resources>

@@ -1,7 +1,5 @@
 package cn.ucai.superwechat.utils;
 
-import android.util.Log;
-
 import java.security.MessageDigest;
 
 public class MD5 {

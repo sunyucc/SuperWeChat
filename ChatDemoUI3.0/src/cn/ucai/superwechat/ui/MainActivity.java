@@ -91,7 +91,7 @@ public class MainActivity extends BaseActivity {
 		
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 		    String packageName = getPackageName();
-		    PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+		    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		    if (!pm.isIgnoringBatteryOptimizations(packageName)) {
 		        Intent intent = new Intent();
 		        intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);

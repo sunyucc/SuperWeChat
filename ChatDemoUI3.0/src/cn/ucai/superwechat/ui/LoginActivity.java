@@ -51,29 +51,32 @@ import cn.ucai.superwechat.utils.ResultUtils;
 
 /**
  * Login screen
+ *
  */
 public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
     public static final int REQUEST_CODE_SETNICK = 1;
-    @BindView(R.id.username)
-    EditText metUsername;
-    @BindView(R.id.password)
-    EditText metPassword;
-    LoginActivity mContext;
     @BindView(R.id.img_back)
     ImageView mImgBack;
     @BindView(R.id.txt_title)
     TextView mTxtTitle;
+    @BindView(R.id.et_username)
+    EditText mEtUsername;
+    @BindView(R.id.et_password)
+    EditText mEtPassword;
+
     private boolean progressShow;
     private boolean autoLogin = false;
+
     String currentUsername;
     String currentPassword;
-    ProgressDialog pd = null;
+    ProgressDialog pd;
+    LoginActivity mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = this;
+
         // enter the main activity if already logged in
         if (SuperWeChatHelper.getInstance().isLoggedIn()) {
             autoLogin = true;
@@ -83,13 +86,16 @@ public class LoginActivity extends BaseActivity {
         }
         setContentView(R.layout.em_activity_login);
         ButterKnife.bind(this);
+
         setListener();
         initView();
+        mContext = this;
+
     }
 
     private void initView() {
         if (SuperWeChatHelper.getInstance().getCurrentUsernName() != null) {
-            metUsername.setText(SuperWeChatHelper.getInstance().getCurrentUsernName());
+            mEtUsername.setText(SuperWeChatHelper.getInstance().getCurrentUsernName());
         }
         mImgBack.setVisibility(View.VISIBLE);
         mTxtTitle.setVisibility(View.VISIBLE);
@@ -98,10 +104,10 @@ public class LoginActivity extends BaseActivity {
 
     private void setListener() {
         // if user changed, clear the password
-        metUsername.addTextChangedListener(new TextWatcher() {
+        mEtUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                metPassword.setText(null);
+                mEtPassword.setText(null);
             }
 
             @Override
@@ -124,8 +130,8 @@ public class LoginActivity extends BaseActivity {
             Toast.makeText(this, R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
             return;
         }
-        currentUsername = metUsername.getText().toString().trim();
-        currentPassword = metPassword.getText().toString().trim();
+        currentUsername = mEtUsername.getText().toString().trim();
+        currentPassword = mEtPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(currentUsername)) {
             Toast.makeText(this, R.string.User_name_cannot_be_empty, Toast.LENGTH_SHORT).show();
@@ -137,7 +143,7 @@ public class LoginActivity extends BaseActivity {
         }
 
         progressShow = true;
-        pd = new ProgressDialog(LoginActivity.this);
+        pd = new ProgressDialog(mContext);
         pd.setCanceledOnTouchOutside(false);
         pd.setOnCancelListener(new OnCancelListener() {
 
@@ -150,6 +156,10 @@ public class LoginActivity extends BaseActivity {
         pd.setMessage(getString(R.string.Is_landing));
         pd.show();
 
+        loginEMServer();
+    }
+
+    private void loginEMServer() {
         // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
         // close it before login to make sure DemoDB not overlap
         SuperWeChatDBManager.getInstance().closeDB();
@@ -160,16 +170,13 @@ public class LoginActivity extends BaseActivity {
         final long start = System.currentTimeMillis();
         // call login method
         Log.d(TAG, "EMClient.getInstance().login");
-        loginEMService();
-    }
-
-    private void loginEMService() {
         EMClient.getInstance().login(currentUsername, MD5.getMessageDigest(currentPassword), new EMCallBack() {
 
             @Override
             public void onSuccess() {
                 Log.d(TAG, "login: onSuccess");
-                loginAppService();
+
+                loginAppServer();
             }
 
             @Override
@@ -194,30 +201,34 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void loginAppService() {
+    private void loginAppServer() {
         NetDao.login(mContext, currentUsername, currentPassword, new OkHttpUtils.OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
-                if (s != null && s != "") {
-                    Result result = ResultUtils.getListResultFromJson(s, User.class);
-                    if (result != null && result.isRetMsg()) {
+                L.e(TAG,"s="+s);
+                if(s!=null && s!=""){
+                    Result result = ResultUtils.getResultFromJson(s, User.class);
+                    if(result!=null && result.isRetMsg()){
                         User user = (User) result.getRetData();
-                        if (user != null) {
+                        if(user!=null) {
                             UserDao dao = new UserDao(mContext);
                             dao.saveUser(user);
                             SuperWeChatHelper.getInstance().setCurrentUser(user);
                             loginSuccess();
                         }
-                    } else {
+                    }else{
                         pd.dismiss();
+                        L.e(TAG,"login fail,"+result);
                     }
+                }else{
+                    pd.dismiss();
                 }
             }
 
             @Override
             public void onError(String error) {
                 pd.dismiss();
-                L.e(TAG,error);
+                L.e(TAG,"onError="+error);
             }
         });
     }
@@ -226,7 +237,7 @@ public class LoginActivity extends BaseActivity {
         // ** manually load all local groups and conversation
         EMClient.getInstance().groupManager().loadAllGroups();
         EMClient.getInstance().chatManager().loadAllConversations();
-        L.e(TAG, R.string.login_success+"");
+
         // update current user's display name for APNs
         boolean updatenick = EMClient.getInstance().updateCurrentUserNick(
                 SuperWeChatApplication.currentUserNick.trim());
@@ -256,29 +267,24 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        MFGT.finish(mContext);
-    }
-
-    @OnClick({R.id.img_back, R.id.btn_login})
+    @OnClick({R.id.img_back, R.id.btn_login, R.id.btn_register})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_back:
-                MFGT.finish(mContext);
+                MFGT.finish(this);
                 break;
             case R.id.btn_login:
                 login();
+                break;
+            case R.id.btn_register:
+                MFGT.gotoRegister(this);
                 break;
         }
     }
 
     @Override
     protected void onDestroy() {
-        if (pd==null) {
-            return;
-        }
-        pd.dismiss();
         super.onDestroy();
+        pd.dismiss();
     }
 }

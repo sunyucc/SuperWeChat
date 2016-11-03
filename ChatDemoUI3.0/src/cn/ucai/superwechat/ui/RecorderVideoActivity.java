@@ -21,6 +21,7 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
@@ -86,7 +87,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 		// translucency mode，used in surface view
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		setContentView(R.layout.em_recorder_activity);
-		PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
 				CLASS_LABEL);
 		mWakeLock.acquire();
@@ -119,7 +120,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 		super.onResume();
 		if (mWakeLock == null) {
 			// keep screen on
-			PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
 					CLASS_LABEL);
 			mWakeLock.acquire();
@@ -134,7 +135,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 			} else {
 				mCamera = Camera.open(CameraInfo.CAMERA_FACING_FRONT);
 			}
-			Camera.Parameters camParams = mCamera.getParameters();
+			Parameters camParams = mCamera.getParameters();
 			mCamera.lock();
 			mSurfaceHolder = mVideoView.getHolder();
 			mSurfaceHolder.addCallback(this);
@@ -176,10 +177,10 @@ public class RecorderVideoActivity extends BaseActivity implements
 		}
 
 		// get all resolutions which camera provide
-		List<Camera.Size> resolutionList = Utils.getResolutionList(mCamera);
+		List<Size> resolutionList = Utils.getResolutionList(mCamera);
 		if (resolutionList != null && resolutionList.size() > 0) {
 			Collections.sort(resolutionList, new Utils.ResolutionComparator());
-			Camera.Size previewSize = null;
+			Size previewSize = null;
 			boolean hasSize = false;
 
 			// use 60*480 if camera support

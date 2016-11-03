@@ -336,6 +336,7 @@
     <!-- lint -->
     <string name="delete_contact">删除联系人</string>
     <string name="loading_more">正在加载更多...</string>
+
     <!--消息码-->
     <string name="msg_101">账号已经存在</string>
     <string name="msg_102">注册失败</string>
