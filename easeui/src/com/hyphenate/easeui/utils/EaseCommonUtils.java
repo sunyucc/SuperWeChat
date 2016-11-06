@@ -155,7 +155,7 @@ public class EaseCommonUtils {
     public static void setUserInitialLetter(EaseUser user) {
         final String DefaultLetter = "#";
         String letter = DefaultLetter;
-
+        
         final class GetInitialLetter {
             String getLetter(String name) {
                 if (TextUtils.isEmpty(name)) {
@@ -190,8 +190,13 @@ public class EaseCommonUtils {
         }
         user.setInitialLetter(letter);
     }
-
-    public static void  setAppUserInitialLetter(User user) {
+    /**
+     * set initial letter of according user's nickname( username if no nickname)
+     *
+     * @param user
+     * @param user
+     */
+    public static void setAppUserInitialLetter(User user) {
         final String DefaultLetter = "#";
         String letter = DefaultLetter;
 
@@ -229,7 +234,7 @@ public class EaseCommonUtils {
         }
         user.setInitialLetter(letter);
     }
-
+    
     /**
      * change the chat type to EMConversationType
      * @param chatType

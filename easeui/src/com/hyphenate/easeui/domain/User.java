@@ -4,7 +4,6 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.io.Serializable;
 
-
 public class User implements Serializable {
 	private String muserName;
 	private String muserNick;
@@ -13,15 +12,6 @@ public class User implements Serializable {
 	private String mavatarSuffix;
 	private Integer mavatarType;
 	private String mavatarLastUpdateTime;
-	private String mAvatar;
-
-	public String getAppAvatar() {
-		return mAvatar;
-	}
-
-	public void setAppAvatar(String mAvatar) {
-		this.mAvatar = mAvatar;
-	}
 
 	/**
 	 * initial letter for nickname
@@ -104,6 +94,24 @@ public class User implements Serializable {
 		return mavatarSuffix==null?".jpg":mavatarSuffix;
 	}
 
+//	public String getInitialLetter() {
+//		if(initialLetter == null){
+//			UserUtils.setUserInitialLetter(this);
+//		}
+//		return initialLetter;
+//	}
+//
+//	public void setInitialLetter(String initialLetter) {
+//		this.initialLetter = initialLetter;
+//	}
+
+	@Override
+	public String toString() {
+		return "UserAvatar [muserName=" + muserName + ", muserNick=" + muserNick + ", mavatarId=" + mavatarId
+				+ ", mavatarPath=" + mavatarPath + ", mavatarSuffix=" + mavatarSuffix + ", mavatarType=" + mavatarType
+				+ ", mavatarLastUpdateTime=" + mavatarLastUpdateTime + "]";
+	}
+
 	public String getInitialLetter() {
 		if(initialLetter == null){
 			EaseCommonUtils.setAppUserInitialLetter(this);
@@ -115,16 +123,8 @@ public class User implements Serializable {
 		this.initialLetter = initialLetter;
 	}
 
-	@Override
-	public String toString() {
-		return "UserAvatar [muserName=" + muserName + ", muserNick=" + muserNick + ", mavatarId=" + mavatarId
-				+ ", mavatarPath=" + mavatarPath + ", mavatarSuffix=" + mavatarSuffix + ", mavatarType=" + mavatarType
-				+ ", mavatarLastUpdateTime=" + mavatarLastUpdateTime + "]";
-	}
-
 	public String getAvatar() {
-		String path = "http://101.251.196.90:8000/SuperWeChatServerV2.0/downloadAvatar?name_or_hxid="+getMUserName()
-				+"&avatarType=user_avatar&m_avatar_suffix="+getMAvatarSuffix()+"&width=200&height=200";
+		String path = "http://101.251.196.90:8000/SuperWeChatServerV2.0/downloadAvatar?name_or_hxid="+getMUserName()+"&avatarType=user_avatar&m_avatar_suffix="+getMAvatarSuffix()+"&width=200&height=200";
 		return path;
 	}
 }

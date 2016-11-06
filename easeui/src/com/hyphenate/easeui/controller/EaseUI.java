@@ -1,10 +1,9 @@
 package com.hyphenate.easeui.controller;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -16,10 +15,11 @@ import com.hyphenate.easeui.domain.User;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.util.Log;
 
 public final class EaseUI {
     private static final String TAG = EaseUI.class.getSimpleName();
@@ -183,7 +183,7 @@ public final class EaseUI {
     
     /**
      * set user profile provider
-//     * @param provider
+     * @param provider
      */
     public void setUserProfileProvider(EaseUserProfileProvider userProvider){
         this.userProvider = userProvider;
