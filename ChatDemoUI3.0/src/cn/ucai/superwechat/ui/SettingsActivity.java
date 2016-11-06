@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import com.hyphenate.util.EMLog;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.SuperWeChatModel;
+import cn.ucai.superwechat.utils.MFGT;
 
 /**
  * settings screen
@@ -42,6 +44,7 @@ import cn.ucai.superwechat.SuperWeChatModel;
  */
 @SuppressWarnings({"FieldCanBeLocal"})
 public class SettingsActivity extends BaseActivity implements OnClickListener {
+	private static final String TAG = SettingsActivity.class.getSimpleName();
 
 	/**
 	 * new message notification
@@ -103,12 +106,20 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 
     private SuperWeChatModel settingsModel;
     private EMOptions chatOptions;
-    @Override
-    protected void onCreate(Bundle arg0) {
-        // TODO Auto-generated method stub
-        super.onCreate(arg0);
-		setContentView(R.layout.em_fragment_conversation_settings);
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.em_fragment_conversation_settings);
+	
+		if(savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
+            return;
+		ImageView back = (ImageView) findViewById(R.id.img_back);
+		back.setVisibility(View.VISIBLE);
+		back.setOnClickListener(this);
+		TextView title = (TextView) findViewById(R.id.txt_title);
+		title.setVisibility(View.VISIBLE);
+		title.setText(getString(R.string.set));
 		rl_switch_notification = (RelativeLayout) findViewById(R.id.rl_switch_notification);
 		rl_switch_sound = (RelativeLayout) findViewById(R.id.rl_switch_sound);
 		rl_switch_vibrate = (RelativeLayout) findViewById(R.id.rl_switch_vibrate);
@@ -343,7 +354,10 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 				}
 				break;
 			case R.id.rl_custom_server:
-				startActivity(new Intent(SettingsActivity.this, SetServersActivity.class));
+				startActivity(new Intent(this, SetServersActivity.class));
+				break;
+			case R.id.img_back:
+				MFGT.finish(this);
 				break;
 			default:
 				break;
@@ -365,8 +379,10 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 					public void run() {
 						pd.dismiss();
 						// show login screen
+//						ExitAppUtils.getInstance().exit();
 						finish();
-						startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
+						startActivity(new Intent(SettingsActivity.this, LoginActivity.class)
+						.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
 						
 					}
 				});
@@ -391,6 +407,5 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 			}
 		});
 	}
-
 
 }

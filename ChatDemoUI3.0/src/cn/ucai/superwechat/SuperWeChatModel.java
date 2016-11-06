@@ -273,6 +273,7 @@ public class SuperWeChatModel {
         UserDao dao = new UserDao(context);
         dao.saveAppContact(user);
     }
+
     public Map<String, User> getAppContactList() {
         UserDao dao = new UserDao(context);
         return dao.getAppContactList();
@@ -283,7 +284,6 @@ public class SuperWeChatModel {
         dao.saveAppContactList(contactList);
         return true;
     }
-
 
     enum Key{
         VibrateAndPlayToneOn,
