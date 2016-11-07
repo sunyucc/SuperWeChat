@@ -208,7 +208,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 //		mTabs[2] = (Button) findViewById(R.id.btn_setting);
 //		// select first tab
 //		mTabs[0].setSelected(true);
-        mTxtLeft.setVisibility(View.VISIBLE);
+        mTxtLeft.setVisibility(View.INVISIBLE);
         mImgRight.setVisibility(View.VISIBLE);
         adapter = new MainTabAdpter(getSupportFragmentManager());
         adapter.clear();
