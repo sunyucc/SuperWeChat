@@ -107,6 +107,8 @@ public class ContactListFragment extends EaseContactListFragment {
                 NetUtils.hasDataConnection(getActivity());
             }
         });
+        titleBar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        titleBar.setVisibility(View.GONE);
         //设置联系人数据
         Map<String, EaseUser> m = SuperWeChatHelper.getInstance().getContactList();
         if (m instanceof Hashtable<?, ?>) {
@@ -234,7 +236,7 @@ public class ContactListFragment extends EaseContactListFragment {
 	/**
 	 * delete contact
 	 * 
-	 * @param
+	 * @param tobeDeleteUser
 	 */
 	public void deleteContact(final EaseUser tobeDeleteUser) {
 		String st1 = getResources().getString(R.string.deleting);

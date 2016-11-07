@@ -89,6 +89,7 @@ public class EaseUserUtils {
     public static void setAppUserAvatar(Context context, String username, ImageView imageView){
         User user = getAppUserInfo(username);
         if(user != null && user.getAvatar() != null){
+            Log.e(TAG,"setAppUserAvatar="+user.getAvatar());
             try {
                 int avatarResId = Integer.parseInt(user.getAvatar());
                 Glide.with(context).load(avatarResId).into(imageView);
@@ -129,6 +130,10 @@ public class EaseUserUtils {
 
     public static void setCurrentAppUserNameWithNo(TextView textView) {
         String username = EMClient.getInstance().getCurrentUser();
+        setAppUserName("微信号 : ",username,textView);
+    }
+
+    public static void setAppUserNameWithNo(String username, TextView textView) {
         setAppUserName("微信号 : ",username,textView);
     }
 

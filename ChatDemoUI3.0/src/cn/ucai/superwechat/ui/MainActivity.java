@@ -98,6 +98,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
     private boolean isCurrentAccountRemoved = false;
 
     MainTabAdpter adapter;
+
     TitlePopup mTitlePopup;
 
 
@@ -214,7 +215,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 //		mTabs[2] = (Button) findViewById(R.id.btn_setting);
 //		// select first tab
 //		mTabs[0].setSelected(true);
-        mTxtLeft.setVisibility(View.INVISIBLE);
+        mTxtLeft.setVisibility(View.VISIBLE);
         mImgRight.setVisibility(View.VISIBLE);
         adapter = new MainTabAdpter(getSupportFragmentManager());
         adapter.clear();
@@ -233,17 +234,16 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
         mTitlePopup.addAction(new ActionItem(this, R.string.menu_addfriend, R.drawable.icon_menu_addfriend));
         mTitlePopup.addAction(new ActionItem(this, R.string.menu_qrcode, R.drawable.icon_menu_sao));
         mTitlePopup.addAction(new ActionItem(this, R.string.menu_money, R.drawable.icon_menu_money));
-        mTitlePopup.setItemOnClickListener(mItemOnClickListener);
+        mTitlePopup.setItemOnClickListener(mOnItemOnClickListener);
     }
-
-    TitlePopup.OnItemOnClickListener mItemOnClickListener = new TitlePopup.OnItemOnClickListener() {
+    TitlePopup.OnItemOnClickListener mOnItemOnClickListener = new TitlePopup.OnItemOnClickListener() {
         @Override
         public void onItemClick(ActionItem item, int position) {
-            switch (position) {
+            switch (position){
                 case 0:
                     break;
                 case 1:
-                    MFGT.gotoAddConFriend(MainActivity.this);
+                    MFGT.gotoAddFirend(MainActivity.this);
                     break;
                 case 2:
                     break;
@@ -371,6 +371,11 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
     @Override
     public void onCheckedChange(int checkedPosition, boolean byUser) {
         mLayoutViewpage.setCurrentItem(checkedPosition, false);
+    }
+
+    @OnClick(R.id.img_right)
+    public void showPop() {
+        mTitlePopup.show(findViewById(R.id.layout_title));
     }
 
     public class MyContactListener implements EMContactListener {
@@ -658,10 +663,5 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
-    }
-
-    @OnClick(R.id.img_right)
-    public void showPop(){
-        mTitlePopup.show(findViewById(R.id.layout_title));
     }
 }

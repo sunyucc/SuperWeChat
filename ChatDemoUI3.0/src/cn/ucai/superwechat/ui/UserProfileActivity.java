@@ -294,6 +294,8 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
             Drawable drawable = new BitmapDrawable(getResources(), photo);
             mIvUserinfoAvatar.setImageDrawable(drawable);
             dialog.dismiss();
+            Toast.makeText(UserProfileActivity.this, getString(R.string.toast_updatephoto_success),
+                    Toast.LENGTH_SHORT).show();
 //            uploadUserAvatar(Bitmap2Bytes(photo));
         }
 
