@@ -193,11 +193,11 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 		}
 
 		// the speaker is switched on or not?
-		if (settingsModel.getSettingMsgSpeaker()) {
-		    speakerSwitch.openSwitch();
-		} else {
-		    speakerSwitch.closeSwitch();
-		}
+//		if (settingsModel.getSettingMsgSpeaker()) {
+//		    speakerSwitch.openSwitch();
+//		} else {
+//		    speakerSwitch.closeSwitch();
+//		}
 
 		// if allow owner leave
 		if(settingsModel.isChatroomOwnerLeaveAllowed()){
