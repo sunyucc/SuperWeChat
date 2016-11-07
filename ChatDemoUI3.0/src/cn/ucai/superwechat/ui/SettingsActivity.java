@@ -61,7 +61,7 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 	/**
 	 * speaker
 	 */
-	private RelativeLayout rl_switch_speaker;
+//	private RelativeLayout rl_switch_speaker;
 
 
 	/**
@@ -123,7 +123,7 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 		rl_switch_notification = (RelativeLayout) findViewById(R.id.rl_switch_notification);
 		rl_switch_sound = (RelativeLayout) findViewById(R.id.rl_switch_sound);
 		rl_switch_vibrate = (RelativeLayout) findViewById(R.id.rl_switch_vibrate);
-		rl_switch_speaker = (RelativeLayout) findViewById(R.id.rl_switch_speaker);
+//		rl_switch_speaker = (RelativeLayout) findViewById(rl_switch_speaker);
 		rl_switch_chatroom_leave = (RelativeLayout) findViewById(R.id.rl_switch_chatroom_owner_leave);
 		rl_switch_delete_msg_when_exit_group = (RelativeLayout) findViewById(R.id.rl_switch_delete_msg_when_exit_group);
 		rl_switch_auto_accept_group_invitation = (RelativeLayout) findViewById(R.id.rl_switch_auto_accept_group_invitation);
@@ -133,7 +133,7 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 		notifiSwitch = (EaseSwitchButton) findViewById(R.id.switch_notification);
 		soundSwitch = (EaseSwitchButton) findViewById(R.id.switch_sound);
 		vibrateSwitch = (EaseSwitchButton) findViewById(R.id.switch_vibrate);
-		speakerSwitch = (EaseSwitchButton) findViewById(R.id.switch_speaker);
+//		speakerSwitch = (EaseSwitchButton) findViewById(R.id.switch_speaker);
 		ownerLeaveSwitch = (EaseSwitchButton) findViewById(R.id.switch_owner_leave);
 		switch_delete_msg_when_exit_group = (EaseSwitchButton) findViewById(R.id.switch_delete_msg_when_exit_group);
 		switch_auto_accept_group_invitation = (EaseSwitchButton) findViewById(R.id.switch_auto_accept_group_invitation);
@@ -160,7 +160,7 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 		rl_switch_notification.setOnClickListener(this);
 		rl_switch_sound.setOnClickListener(this);
 		rl_switch_vibrate.setOnClickListener(this);
-		rl_switch_speaker.setOnClickListener(this);
+//		rl_switch_speaker.setOnClickListener(this);
 		customServerSwitch.setOnClickListener(this);
 		rl_custom_server.setOnClickListener(this);
 		logoutBtn.setOnClickListener(this);
@@ -274,15 +274,15 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
 					settingsModel.setSettingMsgVibrate(true);
 				}
 				break;
-			case R.id.rl_switch_speaker:
-				if (speakerSwitch.isSwitchOpen()) {
-					speakerSwitch.closeSwitch();
-					settingsModel.setSettingMsgSpeaker(false);
-				} else {
-					speakerSwitch.openSwitch();
-					settingsModel.setSettingMsgVibrate(true);
-				}
-				break;
+//			case rl_switch_speaker:
+//				if (speakerSwitch.isSwitchOpen()) {
+//					speakerSwitch.closeSwitch();
+//					settingsModel.setSettingMsgSpeaker(false);
+//				} else {
+//					speakerSwitch.openSwitch();
+//					settingsModel.setSettingMsgVibrate(true);
+//				}
+//				break;
 			case R.id.rl_switch_chatroom_owner_leave:
 				if(ownerLeaveSwitch.isSwitchOpen()){
 					ownerLeaveSwitch.closeSwitch();
