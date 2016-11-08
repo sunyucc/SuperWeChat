@@ -69,7 +69,6 @@ public class AddContactActivity extends BaseActivity {
         mTxtRight.setText(getString(R.string.search));
     }
 
-
     public void searchContact() {
         final String name = mEtUsername.getText().toString().trim();
 
