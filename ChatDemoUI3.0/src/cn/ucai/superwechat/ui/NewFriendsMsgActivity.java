@@ -23,14 +23,15 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.adapter.NewFriendsMsgAdapter;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.domain.InviteMessage;
+import cn.ucai.superwechat.utils.MFGT;
 
 /**
  * Application and notification
- *
  */
 public class NewFriendsMsgActivity extends BaseActivity {
 
@@ -58,7 +59,13 @@ public class NewFriendsMsgActivity extends BaseActivity {
 
     }
 
-    public void back(View view) {
-        finish();
+    @Override
+    public void onBackPressed() {
+        MFGT.finish(this);
+    }
+
+    @OnClick(R.id.img_back)
+    public void onClick() {
+        MFGT.finish(this);
     }
 }

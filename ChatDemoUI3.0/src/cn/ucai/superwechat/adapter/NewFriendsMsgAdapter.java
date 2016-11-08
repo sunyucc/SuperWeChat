@@ -64,7 +64,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			holder.reason = (TextView) convertView.findViewById(R.id.message);
 			holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.agree = (Button) convertView.findViewById(R.id.agree);
-			holder.status = (Button) convertView.findViewById(R.id.user_state);
 			holder.groupContainer = (LinearLayout) convertView.findViewById(R.id.ll_group);
 			holder.groupname = (TextView) convertView.findViewById(R.id.tv_groupName);
 			// holder.time = (TextView) convertView.findViewById(R.id.time);
@@ -99,7 +98,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			}
 			
 			holder.reason.setText(msg.getReason());
-			holder.name.setText(msg.getFrom());
 			NetDao.searchUser(context, msg.getFrom(), new OkHttpUtils.OnCompleteListener<String>() {
 				@Override
 				public void onSuccess(String s) {
@@ -121,7 +119,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			// holder.time.setText(DateUtils.getTimestampString(new
 			// Date(msg.getTime())));
 			if (msg.getStatus() == InviteMesageStatus.BEAGREED) {
-				holder.status.setVisibility(View.INVISIBLE);
 				holder.reason.setText(str1);
 			} else if (msg.getStatus() == InviteMesageStatus.BEINVITEED || msg.getStatus() == InviteMesageStatus.BEAPPLYED ||
 			        msg.getStatus() == InviteMesageStatus.GROUPINVITATION) {
@@ -129,11 +126,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                 holder.agree.setEnabled(true);
                 holder.agree.setBackgroundResource(android.R.drawable.btn_default);
                 holder.agree.setText(str2);
-			    
-				holder.status.setVisibility(View.VISIBLE);
-				holder.status.setEnabled(true);
-				holder.status.setBackgroundResource(android.R.drawable.btn_default);
-				holder.status.setText(str7);
 				if(msg.getStatus() == InviteMesageStatus.BEINVITEED){
 					if (msg.getReason() == null) {
 						// use default text
@@ -154,35 +146,10 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                     @Override
                     public void onClick(View v) {
                         // accept invitation
-                        acceptInvitation(holder.agree, holder.status, msg);
+                        acceptInvitation(holder.agree,msg);
                     }
                 });
-				holder.status.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						// decline invitation
-					    refuseInvitation(holder.agree, holder.status, msg);
-					}
-				});
-			} else if (msg.getStatus() == InviteMesageStatus.AGREED) {
-				holder.status.setText(str5);
-				holder.status.setBackgroundDrawable(null);
-				holder.status.setEnabled(false);
-			} else if(msg.getStatus() == InviteMesageStatus.REFUSED){
-				holder.status.setText(str6);
-				holder.status.setBackgroundDrawable(null);
-				holder.status.setEnabled(false);
-			} else if(msg.getStatus() == InviteMesageStatus.GROUPINVITATION_ACCEPTED){
-			    String str = msg.getGroupInviter() + str9 + msg.getGroupName();
-                holder.status.setText(str);
-                holder.status.setBackgroundDrawable(null);
-                holder.status.setEnabled(false);
-            } else if(msg.getStatus() == InviteMesageStatus.GROUPINVITATION_DECLINED){
-                String str = msg.getGroupInviter() + str10 + msg.getGroupName();
-                holder.status.setText(str);
-                holder.status.setBackgroundDrawable(null);
-                holder.status.setEnabled(false);
-            }
+			}
 		}
 
 		return convertView;
@@ -194,7 +161,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 	 * @param
 	 * @param
 	 */
-	private void acceptInvitation(final Button buttonAgree, final Button buttonRefuse, final InviteMessage msg) {
+	private void acceptInvitation(final Button buttonAgree,  final InviteMessage msg) {
 		final ProgressDialog pd = new ProgressDialog(context);
 		String str1 = context.getResources().getString(R.string.Are_agree_with);
 		final String str2 = context.getResources().getString(R.string.Has_agreed_to);
@@ -228,7 +195,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 							buttonAgree.setBackgroundDrawable(null);
 							buttonAgree.setEnabled(false);
 							
-							buttonRefuse.setVisibility(View.INVISIBLE);
 						}
 					});
 				} catch (final Exception e) {
@@ -281,9 +247,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                         @Override
                         public void run() {
                             pd.dismiss();
-                            buttonRefuse.setText(str2);
-                            buttonRefuse.setBackgroundDrawable(null);
-                            buttonRefuse.setEnabled(false);
 
                             buttonAgree.setVisibility(View.INVISIBLE);
                         }
@@ -308,7 +271,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 		TextView name;
 		TextView reason;
         Button agree;
-		Button status;
 		LinearLayout groupContainer;
 		TextView groupname;
 		// TextView time;
