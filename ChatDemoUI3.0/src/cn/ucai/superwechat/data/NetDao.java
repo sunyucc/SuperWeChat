@@ -78,7 +78,7 @@ public class NetDao {
     public static void addUser(Context context, String username,String cname, OkHttpUtils.OnCompleteListener<String> listener){
         OkHttpUtils<String> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_ADD_CONTACT)
-                .addParam(I.User.USER_NAME,username)
+                .addParam(I.Contact.USER_NAME,username)
                 .addParam(I.Contact.CU_NAME,cname)
                 .targetClass(String.class)
                 .execute(listener);
