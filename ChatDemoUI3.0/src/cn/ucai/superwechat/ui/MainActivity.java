@@ -81,8 +81,8 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 //	private TextView unreadAddressLable;
 //
 //	private Button[] mTabs;
-	private ContactListFragment contactListFragment;
-//	private Fragment[] fragments;
+    private ContactListFragment contactListFragment;
+    //	private Fragment[] fragments;
 //	private int index;
     private int currentTabIndex;
     // user logged into another device
@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
         setContentView(R.layout.em_activity_main);
         ButterKnife.bind(this);
-		contactListFragment = new ContactListFragment();
+        contactListFragment = new ContactListFragment();
         // runtime permission for android 6.0, just require all permissions here for simple
         requestPermissions();
         conversationListFragment = new ConversationListFragment();
@@ -299,12 +299,12 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
             public void run() {
                 // refresh unread count
                 updateUnreadLabel();
-				if (currentTabIndex == 0) {
-					// refresh conversation list
-					if (conversationListFragment != null) {
-						conversationListFragment.refresh();
-					}
-				}
+                if (currentTabIndex == 0) {
+                    // refresh conversation list
+                    if (conversationListFragment != null) {
+                        conversationListFragment.refresh();
+                    }
+                }
             }
         });
     }
@@ -327,9 +327,9 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
                 updateUnreadLabel();
                 updateUnreadAddressLable();
 //                if (currentTabIndex == 0) {
-                    // refresh conversation list
-                    if (conversationListFragment != null) {
-                        conversationListFragment.refresh();
+                // refresh conversation list
+                if (conversationListFragment != null) {
+                    conversationListFragment.refresh();
 //                    }
 //                } else if (currentTabIndex == 1) {
                     if (contactListFragment != null) {
@@ -441,12 +441,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
      */
     public void updateUnreadLabel() {
         int count = getUnreadMsgCountTotal();
-//		if (count > 0) {
-//			unreadLabel.setText(String.valueOf(count));
-//			unreadLabel.setVisibility(View.VISIBLE);
-//		} else {
-//			unreadLabel.setVisibility(View.INVISIBLE);
-//		}
+        mLayoutTabhost.setUnreadCount(0, count);
     }
 
     /**
@@ -457,11 +452,11 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
             public void run() {
                 int count = getUnreadAddressCountTotal();
                 L.e(TAG, count + "");
-                    if (count > 0) {
-                        mLayoutTabhost.setHasNew(1, true);
-                    } else {
-                        mLayoutTabhost.setHasNew(1, false);
-                    }
+                if (count > 0) {
+                    mLayoutTabhost.setHasNew(1, true);
+                } else {
+                    mLayoutTabhost.setHasNew(1, false);
+                }
 
             }
         });

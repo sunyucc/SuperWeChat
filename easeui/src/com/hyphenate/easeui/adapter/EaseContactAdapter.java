@@ -85,7 +85,6 @@ public class  EaseContactAdapter extends ArrayAdapter<EaseUser> implements Secti
 
         EaseUserUtils.setAppUserNick(username, holder.nameView);
         EaseUserUtils.setAppUserAvatar(getContext(), username, holder.avatar);
-        
        
         if(primaryColor != 0)
             holder.nameView.setTextColor(primaryColor);

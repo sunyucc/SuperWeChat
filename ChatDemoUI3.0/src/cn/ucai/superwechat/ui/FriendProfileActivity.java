@@ -38,7 +38,6 @@ public class FriendProfileActivity extends BaseActivity {
     Button mBtnSendMsg;
     @BindView(R.id.btn_send_video)
     Button mBtnSendVideo;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
