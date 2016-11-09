@@ -23,7 +23,7 @@ import com.hyphenate.util.EMLog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements SectionIndexer{
+public class  EaseContactAdapter extends ArrayAdapter<EaseUser> implements SectionIndexer{
     private static final String TAG = "ContactAdapter";
     List<String> list;
     List<EaseUser> userList;
@@ -83,8 +83,8 @@ public class EaseContactAdapter extends ArrayAdapter<EaseUser> implements Sectio
             holder.headerView.setVisibility(View.GONE);
         }
 
-        EaseUserUtils.setUserNick(username, holder.nameView);
-        EaseUserUtils.setUserAvatar(getContext(), username, holder.avatar);
+        EaseUserUtils.setAppUserNick(username, holder.nameView);
+        EaseUserUtils.setAppUserAvatar(getContext(), username, holder.avatar);
         
        
         if(primaryColor != 0)

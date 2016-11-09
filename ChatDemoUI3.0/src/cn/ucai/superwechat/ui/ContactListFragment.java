@@ -222,21 +222,14 @@ public class ContactListFragment extends EaseContactListFragment {
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.delete_contact) {
-            NetDao.deleteUser(getActivity(), EMClient.getInstance().getCurrentUser(), toBeProcessUsername, new OkHttpUtils.OnCompleteListener<String>() {
+
+            NetDao.deleteUser(getActivity(), EMClient.getInstance().getCurrentUser(),toBeProcessUsername, new OkHttpUtils.OnCompleteListener<String>() {
                 @Override
                 public void onSuccess(String s) {
                     if (s != null) {
                         Result result = ResultUtils.getResultFromJson(s, User.class);
                         if (result != null && result.isRetMsg()) {
-                            try {
-                                // delete contact
-                                deleteContact(toBeProcessUser);
-                                // remove invitation message
-                                InviteMessgeDao dao = new InviteMessgeDao(getActivity());
-                                dao.deleteMessage(toBeProcessUser.getUsername());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            SuperWeChatHelper.getInstance().deleteContact(toBeProcessUsername);
                         }
                     }
                 }
@@ -245,6 +238,15 @@ public class ContactListFragment extends EaseContactListFragment {
                 public void onError(String error) {
                 }
             });
+            try {
+                // delete contact
+                deleteContact(toBeProcessUser);
+                // remove invitation message
+                InviteMessgeDao dao = new InviteMessgeDao(getActivity());
+                dao.deleteMessage(toBeProcessUser.getUsername());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return true;
 		}else if(item.getItemId() == R.id.add_to_blacklist){
 			moveToBlacklist(toBeProcessUsername);
@@ -266,6 +268,7 @@ public class ContactListFragment extends EaseContactListFragment {
 		pd.setMessage(st1);
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
+
 		new Thread(new Runnable() {
 			public void run() {
 				try {
