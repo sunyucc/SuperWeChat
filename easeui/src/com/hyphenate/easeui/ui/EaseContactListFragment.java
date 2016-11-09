@@ -53,7 +53,7 @@ import java.util.Map.Entry;
  * contact list
  * 
  */
-public class EaseContactListFragment extends EaseBaseFragment {
+public  class EaseContactListFragment extends EaseBaseFragment {
     private static final String TAG = "EaseContactListFragment";
     protected List<User> contactList;
     protected ListView listView;
@@ -334,5 +334,5 @@ public class EaseContactListFragment extends EaseBaseFragment {
     public void setContactListItemClickListener(EaseContactListItemClickListener listItemClickListener){
         this.listItemClickListener = listItemClickListener;
     }
-    
+
 }

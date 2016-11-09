@@ -2,6 +2,7 @@ package com.hyphenate.easeui.widget.chatrow;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.BaseAdapter;
@@ -19,7 +20,6 @@ import com.hyphenate.chat.EMMessage.Direct;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.utils.EaseUserUtils;
-import com.hyphenate.easeui.widget.EaseChatMessageList;
 import com.hyphenate.easeui.widget.EaseChatMessageList.MessageListItemClickListener;
 import com.hyphenate.util.DateUtils;
 
@@ -116,10 +116,10 @@ public abstract class EaseChatRow extends LinearLayout {
         }
         //set nickname and avatar
         if(message.direct() == Direct.SEND){
-            EaseUserUtils.setUserAvatar(context, EMClient.getInstance().getCurrentUser(), userAvatarView);
+            EaseUserUtils.setCurentAppUserAvatar((FragmentActivity) context,  userAvatarView);
         }else{
-            EaseUserUtils.setUserAvatar(context, message.getFrom(), userAvatarView);
-            EaseUserUtils.setUserNick(message.getFrom(), usernickView);
+            EaseUserUtils.setAppUserAvatar(context, message.getFrom(), userAvatarView);
+            EaseUserUtils.setAppUserNick(message.getFrom(), usernickView);
         }
         
         if(deliveredView != null){
