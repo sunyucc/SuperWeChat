@@ -194,14 +194,6 @@ public class ContactListFragment extends EaseContactListFragment {
                 // 进入群聊列表页面
                 startActivity(new Intent(getActivity(), GroupsActivity.class));
                 break;
-//            case R.id.chat_room_item:
-//                //进入聊天室列表页面
-//                startActivity(new Intent(getActivity(), PublicChatRoomsActivity.class));
-//                break;
-//            case R.id.robot_item:
-//                //进入Robot列表页面
-//                startActivity(new Intent(getActivity(), RobotsActivity.class));
-//                break;
 
             default:
                 break;
@@ -223,21 +215,6 @@ public class ContactListFragment extends EaseContactListFragment {
 	public boolean onContextItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.delete_contact) {
 
-            NetDao.deleteUser(getActivity(), EMClient.getInstance().getCurrentUser(),toBeProcessUsername, new OkHttpUtils.OnCompleteListener<String>() {
-                @Override
-                public void onSuccess(String s) {
-                    if (s != null) {
-                        Result result = ResultUtils.getResultFromJson(s, User.class);
-                        if (result != null && result.isRetMsg()) {
-                            SuperWeChatHelper.getInstance().deleteContact(toBeProcessUsername);
-                        }
-                    }
-                }
-
-                @Override
-                public void onError(String error) {
-                }
-            });
             try {
                 // delete contact
                 deleteContact(toBeProcessUser);
@@ -269,6 +246,22 @@ public class ContactListFragment extends EaseContactListFragment {
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
 
+        NetDao.deleteUser(getActivity(), EMClient.getInstance().getCurrentUser(),toBeProcessUsername, new OkHttpUtils.OnCompleteListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                if (s != null) {
+                    Result result = ResultUtils.getResultFromJson(s, User.class);
+                    if (result != null && result.isRetMsg()) {
+                        SuperWeChatHelper.getInstance().deleteContact(toBeProcessUsername);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                return;
+            }
+        });
 		new Thread(new Runnable() {
 			public void run() {
 				try {

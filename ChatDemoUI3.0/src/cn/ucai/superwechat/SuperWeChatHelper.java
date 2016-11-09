@@ -1348,7 +1348,7 @@ public class SuperWeChatHelper {
         demoModel.saveAppContactList(mList);
     }
     public void deleteContact(String username){
-        contactList.remove(username);
+        appContactList.remove(username);
         demoModel.delAppContact(username);
     }
 }
