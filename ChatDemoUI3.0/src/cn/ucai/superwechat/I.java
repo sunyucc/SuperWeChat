@@ -2,6 +2,8 @@ package cn.ucai.superwechat;
 
 public interface I {
 
+	String ACTION_BACK_CONVERSATION = "返回mainActivity";
+
 	public static interface User {
 		String TABLE_NAME							=		"t_superwechat_user";
 		String USER_NAME 							= 		"m_user_name";					//用户账号

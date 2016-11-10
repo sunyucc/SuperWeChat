@@ -57,6 +57,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.superwechat.Constant;
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.adapter.MainTabAdpter;
@@ -503,6 +504,10 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
         // unregister this event listener when this activity enters the
         // background
+        boolean extra = getIntent().getBooleanExtra(I.ACTION_BACK_CONVERSATION, false);
+        if(extra){
+            mLayoutTabhost.setChecked(0);
+        }
         SuperWeChatHelper sdkHelper = SuperWeChatHelper.getInstance();
         sdkHelper.pushActivity(this);
 
