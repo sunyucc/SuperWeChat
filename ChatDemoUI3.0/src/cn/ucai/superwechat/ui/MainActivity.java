@@ -82,10 +82,10 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 //	private TextView unreadAddressLable;
 //
 //	private Button[] mTabs;
-    private ContactListFragment contactListFragment;
-    //	private Fragment[] fragments;
+	private ContactListFragment contactListFragment;
+//	private Fragment[] fragments;
 //	private int index;
-    private int currentTabIndex;
+	private int currentTabIndex;
     // user logged into another device
     public boolean isConflict = false;
     @BindView(R.id.txt_left)
@@ -102,6 +102,15 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
     MainTabAdpter adapter;
 
     TitlePopup mTitlePopup;
+
+    private AlertDialog.Builder conflictBuilder;
+    private AlertDialog.Builder accountRemovedBuilder;
+    private boolean isConflictDialogShow;
+    private boolean isAccountRemovedDialogShow;
+    private BroadcastReceiver internalDebugReceiver;
+    private ConversationListFragment conversationListFragment;
+    private BroadcastReceiver broadcastReceiver;
+    private LocalBroadcastManager broadcastManager;
 
 
     /**
@@ -120,10 +129,10 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
         setContentView(R.layout.em_activity_main);
         ButterKnife.bind(this);
-        contactListFragment = new ContactListFragment();
         // runtime permission for android 6.0, just require all permissions here for simple
         requestPermissions();
-        conversationListFragment = new ConversationListFragment();
+		conversationListFragment = new ConversationListFragment();
+        contactListFragment = new ContactListFragment();
         initView();
         umeng();
 
@@ -228,21 +237,21 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
         adapter.addFragment(new DiscoverFragment(), getString(R.string.discover));
         adapter.addFragment(new ProfileFragment(), getString(R.string.me));
         adapter.notifyDataSetChanged();
+        currentTabIndex = 0;
         mLayoutTabhost.setChecked(0);
         mLayoutTabhost.setOnCheckedChangeListener(this);
         mLayoutViewpage.setOnPageChangeListener(this);
         mTitlePopup = new TitlePopup(this, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mTitlePopup.setItemOnClickListener(mOnItemOnClickListener);
         mTitlePopup.addAction(new ActionItem(this, R.string.menu_groupchat, R.drawable.icon_menu_group));
         mTitlePopup.addAction(new ActionItem(this, R.string.menu_addfriend, R.drawable.icon_menu_addfriend));
         mTitlePopup.addAction(new ActionItem(this, R.string.menu_qrcode, R.drawable.icon_menu_sao));
         mTitlePopup.addAction(new ActionItem(this, R.string.menu_money, R.drawable.icon_menu_money));
-        mTitlePopup.setItemOnClickListener(mOnItemOnClickListener);
     }
-
     TitlePopup.OnItemOnClickListener mOnItemOnClickListener = new TitlePopup.OnItemOnClickListener() {
         @Override
         public void onItemClick(ActionItem item, int position) {
-            switch (position) {
+            switch (position){
                 case 0:
                     break;
                 case 1:
@@ -300,12 +309,12 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
             public void run() {
                 // refresh unread count
                 updateUnreadLabel();
-                if (currentTabIndex == 0) {
-                    // refresh conversation list
-                    if (conversationListFragment != null) {
-                        conversationListFragment.refresh();
-                    }
-                }
+				if (currentTabIndex == 0) {
+					// refresh conversation list
+					if (conversationListFragment != null) {
+						conversationListFragment.refresh();
+					}
+				}
             }
         });
     }
@@ -328,15 +337,15 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
                 updateUnreadLabel();
                 updateUnreadAddressLable();
 //                if (currentTabIndex == 0) {
-                // refresh conversation list
-                if (conversationListFragment != null) {
-                    conversationListFragment.refresh();
-//                    }
+                    // refresh conversation list
+                    if (conversationListFragment != null) {
+                        conversationListFragment.refresh();
+                    }
 //                } else if (currentTabIndex == 1) {
-                    if (contactListFragment != null) {
+                    if(contactListFragment != null) {
                         contactListFragment.refresh();
                     }
-                }
+//                }
                 String action = intent.getAction();
                 if (action.equals(Constant.ACTION_GROUP_CHANAGED)) {
                     if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
@@ -442,7 +451,8 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
      */
     public void updateUnreadLabel() {
         int count = getUnreadMsgCountTotal();
-        mLayoutTabhost.setUnreadCount(0, count);
+        L.e(TAG,"updateUnread,count="+count);
+        mLayoutTabhost.setUnreadCount(0,count);
     }
 
     /**
@@ -452,13 +462,12 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
         runOnUiThread(new Runnable() {
             public void run() {
                 int count = getUnreadAddressCountTotal();
-                L.e(TAG, count + "");
+                L.e(TAG,"updateUnreadAddressLable,count="+count);
                 if (count > 0) {
                     mLayoutTabhost.setHasNew(1, true);
                 } else {
                     mLayoutTabhost.setHasNew(1, false);
                 }
-
             }
         });
 
@@ -502,12 +511,14 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
             updateUnreadAddressLable();
         }
 
-        // unregister this event listener when this activity enters the
-        // background
         boolean extra = getIntent().getBooleanExtra(I.ACTION_BACK_CONVERSATION, false);
+        L.e(TAG,"extra="+extra);
         if(extra){
             mLayoutTabhost.setChecked(0);
         }
+
+        // unregister this event listener when this activity enters the
+        // background
         SuperWeChatHelper sdkHelper = SuperWeChatHelper.getInstance();
         sdkHelper.pushActivity(this);
 
@@ -538,15 +549,6 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
         }
         return super.onKeyDown(keyCode, event);
     }
-
-    private AlertDialog.Builder conflictBuilder;
-    private AlertDialog.Builder accountRemovedBuilder;
-    private boolean isConflictDialogShow;
-    private boolean isAccountRemovedDialogShow;
-    private BroadcastReceiver internalDebugReceiver;
-    private ConversationListFragment conversationListFragment;
-    private BroadcastReceiver broadcastReceiver;
-    private LocalBroadcastManager broadcastManager;
 
     /**
      * show the dialog when user logged into another device
@@ -627,6 +629,12 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
             showConflictDialog();
         } else if (intent.getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
             showAccountRemovedDialog();
+        }
+
+        boolean isBack = intent.getBooleanExtra(I.ACTION_BACK_CONVERSATION, false);
+        L.e(TAG,"isBack="+isBack);
+        if(isBack){
+            mLayoutTabhost.setChecked(0);
         }
     }
 

@@ -611,27 +611,31 @@ public class SuperWeChatHelper {
 
         @Override
         public void onContactAdded(String username) {
+            L.e(TAG,"MyContactListener,onContactAdded...");
             // save contact
             Map<String, EaseUser> localUsers = getContactList();
             Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
-            final EaseUser user = new EaseUser(username);
+            EaseUser user = new EaseUser(username);
 
             if (!localUsers.containsKey(username)) {
                 userDao.saveContact(user);
             }
             toAddUsers.put(username, user);
             localUsers.putAll(toAddUsers);
+
             Map<String, User> localAppUsers = getAppContactList();
-            if (!localAppUsers.containsKey(username)) {
-                NetDao.addUser(appContext,EMClient.getInstance().getCurrentUser(), username, new OkHttpUtils.OnCompleteListener<String>() {
+            if(!localAppUsers.containsKey(username)){
+                NetDao.addContact(appContext, EMClient.getInstance().getCurrentUser(),username, new OkHttpUtils.OnCompleteListener<String>() {
                     @Override
                     public void onSuccess(String s) {
-                        if (s != null) {
+                        if(s!=null){
                             Result result = ResultUtils.getResultFromJson(s, User.class);
-                            if (result != null && result.isRetMsg()) {
+                            if(result!=null && result.isRetMsg()){
                                 User u = (User) result.getRetData();
-                                saveAppContact(u);
-                                broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+                                if(u!=null) {
+                                    saveAppContact(u);
+                                    broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+                                }
                             }
                         }
                     }
@@ -642,22 +646,25 @@ public class SuperWeChatHelper {
                     }
                 });
             }
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
 
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
 
         @Override
-        public void onContactDeleted(String username) {
+        public void onContactDeleted(final String username) {
+            L.e(TAG,"MyContactListener,onContactDeleted...");
             Map<String, EaseUser> localUsers = SuperWeChatHelper.getInstance().getContactList();
             localUsers.remove(username);
             userDao.deleteContact(username);
             inviteMessgeDao.deleteMessage(username);
-            SuperWeChatHelper.getInstance().deleteContact(username);
+            SuperWeChatHelper.getInstance().delAppContact(username);
+
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
 
         @Override
         public void onContactInvited(String username, String reason) {
+            L.e(TAG,"MyContactListener,onContactInvited...");
             List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
 
             for (InviteMessage inviteMessage : msgs) {
@@ -679,6 +686,7 @@ public class SuperWeChatHelper {
 
         @Override
         public void onContactAgreed(String username) {
+            L.e(TAG,"MyContactListener,onContactAgreed...");
             List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
             for (InviteMessage inviteMessage : msgs) {
                 if (inviteMessage.getFrom().equals(username)) {
@@ -697,6 +705,7 @@ public class SuperWeChatHelper {
 
         @Override
         public void onContactRefused(String username) {
+            L.e(TAG,"MyContactListener,onContactRefused...");
             // your request was refused
             Log.d(username, username + " refused to your request");
         }
@@ -1105,20 +1114,22 @@ public class SuperWeChatHelper {
    }
    
    public void asyncFetchContactsFromServer(final EMValueCallBack<List<String>> callback){
+       L.e(TAG,"asyncFetchContactsFromServer....."+EMClient.getInstance().getCurrentUser());
        if(isSyncingContactsWithServer){
            return;
        }
        
        isSyncingContactsWithServer = true;
+
        NetDao.loadContact(appContext, new OkHttpUtils.OnCompleteListener<String>() {
            @Override
            public void onSuccess(String s) {
-               if (s != null) {
-                   Result result = ResultUtils.getListResultFromJson(s,User.class);
-                   if (result != null && result.isRetMsg()) {
+               if(s!=null){
+                   Result result = ResultUtils.getListResultFromJson(s, User.class);
+                   if(result!=null && result.isRetMsg()){
                        List<User> list = (List<User>) result.getRetData();
-                       if (list != null && list.size() > 0) {
-
+                       if(list!=null && list.size()>0){
+                           L.e(TAG,"list="+list.size());
                            Map<String, User> userlist = new HashMap<String, User>();
                            for (User user : list) {
                                EaseCommonUtils.setAppUserInitialLetter(user);
@@ -1131,11 +1142,10 @@ public class SuperWeChatHelper {
                            UserDao dao = new UserDao(appContext);
                            List<User> users = new ArrayList<User>(userlist.values());
                            dao.saveAppContactList(users);
+                           broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
                        }
                    }
                }
-               broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-
            }
 
            @Override
@@ -1380,8 +1390,12 @@ public class SuperWeChatHelper {
         mList.addAll(appContactList.values());
         demoModel.saveAppContactList(mList);
     }
-    public void deleteContact(String username){
-        appContactList.remove(username);
+
+    /**
+     * save single contact
+     */
+    public void delAppContact(String username){
+        getAppContactList().remove(username);
         demoModel.delAppContact(username);
     }
 }

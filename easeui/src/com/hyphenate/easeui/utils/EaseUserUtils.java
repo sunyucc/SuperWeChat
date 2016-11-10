@@ -88,7 +88,7 @@ public class EaseUserUtils {
      */
     public static void setAppUserAvatar(Context context, String username, ImageView imageView){
         User user = getAppUserInfo(username);
-        if (user == null) {
+        if(user==null){
             user = new User(username);
         }
         if(user != null && user.getAvatar() != null){
@@ -105,6 +105,10 @@ public class EaseUserUtils {
         }
     }
 
+    /**
+     * set user avatar
+     * @param path
+     */
     public static void setAppUserPathAvatar(Context context, String path, ImageView imageView){
         if(path != null){
             try {

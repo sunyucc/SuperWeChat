@@ -53,7 +53,7 @@ import java.util.Map.Entry;
  * contact list
  * 
  */
-public  class EaseContactListFragment extends EaseBaseFragment {
+public class EaseContactListFragment extends EaseBaseFragment {
     private static final String TAG = "EaseContactListFragment";
     protected List<User> contactList;
     protected ListView listView;
@@ -211,6 +211,8 @@ public  class EaseContactListFragment extends EaseBaseFragment {
     public void refresh() {
         getContactList();
         contactListLayout.refresh();
+        query.getText().clear();
+        hideSoftKeyboard();
     }
     
 
@@ -317,6 +319,7 @@ public  class EaseContactListFragment extends EaseBaseFragment {
      */
     public void setContactsMap(Map<String, User> contactsMap){
         this.contactsMap = contactsMap;
+        contactsMap.remove(EMClient.getInstance().getCurrentUser());
     }
     
     public interface EaseContactListItemClickListener {
@@ -334,5 +337,5 @@ public  class EaseContactListFragment extends EaseBaseFragment {
     public void setContactListItemClickListener(EaseContactListItemClickListener listItemClickListener){
         this.listItemClickListener = listItemClickListener;
     }
-
+    
 }

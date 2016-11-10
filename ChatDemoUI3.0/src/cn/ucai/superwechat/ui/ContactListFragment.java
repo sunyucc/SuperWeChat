@@ -43,6 +43,7 @@ import cn.ucai.superwechat.data.NetDao;
 import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.db.UserDao;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.MFGT;
 import cn.ucai.superwechat.utils.ResultUtils;
 import cn.ucai.superwechat.widget.ContactItemView;
@@ -86,7 +87,6 @@ public class ContactListFragment extends EaseContactListFragment {
         if (m instanceof Hashtable<?, ?>) {
             //noinspection unchecked
             m = (Map<String, User>) ((Hashtable<String, User>)m).clone();
-            m.remove(EMClient.getInstance().getCurrentUser());
         }
         setContactsMap(m);
         super.refresh();
@@ -114,7 +114,7 @@ public class ContactListFragment extends EaseContactListFragment {
             }
         });
         titleBar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        titleBar.setVisibility(View.GONE);
+        hideTitleBar();
         //设置联系人数据
         Map<String, User> m = SuperWeChatHelper.getInstance().getAppContactList();
         if (m instanceof Hashtable<?, ?>) {
@@ -130,8 +130,8 @@ public class ContactListFragment extends EaseContactListFragment {
                 if (user != null) {
                     String username = user.getMUserName();
                     // demo中直接进入聊天页面，实际一般是进入用户详情页
-//                    startActivity(new Intent(getActivity(), ChatActivity.class).putExtra("userId", username));
                     MFGT.gotoFriendProfile(getActivity(),SuperWeChatHelper.getInstance().getAppContactList().get(username));
+//                    startActivity(new Intent(getActivity(), ChatActivity.class).putExtra("userId", username));
                 }
             }
         });
@@ -187,13 +187,21 @@ public class ContactListFragment extends EaseContactListFragment {
         public void onClick(View v) {
             switch (v.getId()) {
             case R.id.application_item:
-                // 进入申请与通知页面
-                startActivity(new Intent(getActivity(), NewFriendsMsgActivity.class));
+                // 进入新的朋友
+                MFGT.gotoNewFriendsMsg(getActivity());
                 break;
             case R.id.group_item:
                 // 进入群聊列表页面
-                startActivity(new Intent(getActivity(), GroupsActivity.class));
+                MFGT.gotoGroup(getActivity());
                 break;
+//            case R.id.chat_room_item:
+//                //进入聊天室列表页面
+//                startActivity(new Intent(getActivity(), PublicChatRoomsActivity.class));
+//                break;
+//            case R.id.robot_item:
+//                //进入Robot列表页面
+//                startActivity(new Intent(getActivity(), RobotsActivity.class));
+//                break;
 
             default:
                 break;
@@ -213,9 +221,9 @@ public class ContactListFragment extends EaseContactListFragment {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
+        L.e(TAG,"onContextItemSelected..."+item.getItemId());
 		if (item.getItemId() == R.id.delete_contact) {
-
-            try {
+			try {
                 // delete contact
                 deleteContact(toBeProcessUser);
                 // remove invitation message
@@ -224,9 +232,6 @@ public class ContactListFragment extends EaseContactListFragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return true;
-		}else if(item.getItemId() == R.id.add_to_blacklist){
-			moveToBlacklist(toBeProcessUsername);
 			return true;
 		}
 		return super.onContextItemSelected(item);
@@ -246,22 +251,23 @@ public class ContactListFragment extends EaseContactListFragment {
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
 
-        NetDao.deleteUser(getActivity(), EMClient.getInstance().getCurrentUser(),toBeProcessUsername, new OkHttpUtils.OnCompleteListener<String>() {
-            @Override
-            public void onSuccess(String s) {
-                if (s != null) {
-                    Result result = ResultUtils.getResultFromJson(s, User.class);
-                    if (result != null && result.isRetMsg()) {
-                        SuperWeChatHelper.getInstance().deleteContact(toBeProcessUsername);
+        NetDao.delContact(getActivity(), EMClient.getInstance().getCurrentUser(), tobeDeleteUser.getMUserName(),
+                new OkHttpUtils.OnCompleteListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        if(s!=null){
+                            Result result = ResultUtils.getResultFromJson(s, User.class);
+                            if(result!=null && result.isRetMsg()){
+                                SuperWeChatHelper.getInstance().delAppContact(tobeDeleteUser.getMUserName());
+                            }
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void onError(String error) {
-                return;
-            }
-        });
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
 		new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -352,5 +358,5 @@ public class ContactListFragment extends EaseContactListFragment {
         }
         
     }
-
+	
 }

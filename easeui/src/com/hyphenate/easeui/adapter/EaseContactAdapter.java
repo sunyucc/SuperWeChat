@@ -23,7 +23,7 @@ import com.hyphenate.util.EMLog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class  EaseContactAdapter extends ArrayAdapter<User> implements SectionIndexer{
+public class EaseContactAdapter extends ArrayAdapter<User> implements SectionIndexer{
     private static final String TAG = "ContactAdapter";
     List<String> list;
     List<User> userList;
@@ -43,7 +43,7 @@ public class  EaseContactAdapter extends ArrayAdapter<User> implements SectionIn
         copyUserList.addAll(objects);
         layoutInflater = LayoutInflater.from(context);
     }
-    
+
     private static class ViewHolder {
         ImageView avatar;
         TextView nameView;
@@ -65,13 +65,13 @@ public class  EaseContactAdapter extends ArrayAdapter<User> implements SectionIn
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-        
+
         User user = getItem(position);
         if(user == null)
             Log.d("ContactAdapter", position + "");
         String username = user.getMUserName();
         String header = user.getInitialLetter();
-        
+
         if (position == 0 || header != null && !header.equals(getItem(position - 1).getInitialLetter())) {
             if (TextUtils.isEmpty(header)) {
                 holder.headerView.setVisibility(View.GONE);
@@ -85,7 +85,8 @@ public class  EaseContactAdapter extends ArrayAdapter<User> implements SectionIn
 
         EaseUserUtils.setAppUserNick(username, holder.nameView);
         EaseUserUtils.setAppUserAvatar(getContext(), username, holder.avatar);
-       
+
+
         if(primaryColor != 0)
             holder.nameView.setTextColor(primaryColor);
         if(primarySize != 0)
@@ -94,15 +95,15 @@ public class  EaseContactAdapter extends ArrayAdapter<User> implements SectionIn
             holder.headerView.setBackgroundDrawable(initialLetterBg);
         if(initialLetterColor != 0)
             holder.headerView.setTextColor(initialLetterColor);
-        
+
         return convertView;
     }
-    
+
     @Override
     public User getItem(int position) {
         return super.getItem(position);
     }
-    
+
     @Override
     public int getCount() {
         return super.getCount();
@@ -117,7 +118,7 @@ public class  EaseContactAdapter extends ArrayAdapter<User> implements SectionIn
     public int getSectionForPosition(int position) {
         return sectionOfPosition.get(position);
     }
-    
+
     @Override
     public Object[] getSections() {
         positionOfSection = new SparseIntArray();
@@ -140,7 +141,7 @@ public class  EaseContactAdapter extends ArrayAdapter<User> implements SectionIn
         }
         return list.toArray(new String[list.size()]);
     }
-    
+
     @Override
     public Filter getFilter() {
         if(myFilter==null){
@@ -148,10 +149,10 @@ public class  EaseContactAdapter extends ArrayAdapter<User> implements SectionIn
         }
         return myFilter;
     }
-    
+
     protected class  MyFilter extends Filter{
         List<User> mOriginalList = null;
-        
+
         public MyFilter(List<User> myList) {
             this.mOriginalList = myList;
         }
@@ -164,7 +165,7 @@ public class  EaseContactAdapter extends ArrayAdapter<User> implements SectionIn
             }
             EMLog.d(TAG, "contacts original size: " + mOriginalList.size());
             EMLog.d(TAG, "contacts copy size: " + copyUserList.size());
-            
+
             if(prefix==null || prefix.length()==0){
                 results.values = copyUserList;
                 results.count = copyUserList.size();
@@ -175,14 +176,15 @@ public class  EaseContactAdapter extends ArrayAdapter<User> implements SectionIn
                 for(int i=0;i<count;i++){
                     final User user = mOriginalList.get(i);
                     String username = user.getMUserName();
-                    String usernick = user.getMUserNick();
-                    if(username.startsWith(prefixString)||usernick.startsWith(prefixString)){
+                    String nickname = user.getMUserNick();
+
+                    if(username.contains(prefixString) || nickname.contains(prefixString)){
                         newValues.add(user);
                     }
                     else{
                          final String[] words = username.split(" ");
                          final int wordCount = words.length;
-    
+
                          // Start at index 0, in case valueText starts with space(s)
                         for (String word : words) {
                             if (word.startsWith(prefixString)) {

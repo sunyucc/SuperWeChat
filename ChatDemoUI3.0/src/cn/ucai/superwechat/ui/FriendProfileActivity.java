@@ -40,6 +40,7 @@ public class FriendProfileActivity extends BaseActivity {
     Button mBtnSendMsg;
     @BindView(R.id.btn_send_video)
     Button mBtnSendVideo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,14 +87,15 @@ public class FriendProfileActivity extends BaseActivity {
                 MFGT.gotoAddFirendMsg(this,user.getMUserName());
                 break;
             case R.id.btn_send_msg:
-                startActivity(new Intent(FriendProfileActivity.this, ChatActivity.class).putExtra("userId", user.getMUserName()));
+                MFGT.gotoChat(this,user.getMUserName());
                 break;
             case R.id.btn_send_video:
-                if (!EMClient.getInstance().isConnected()) {
+                if (!EMClient.getInstance().isConnected())
                     Toast.makeText(this, R.string.not_connect_to_server, Toast.LENGTH_SHORT).show();
-                } else {
-                    startActivity(new Intent(this,VideoCallActivity.class)
-                    .putExtra("isComingCall",false));
+                else {
+                    startActivity(new Intent(this, VideoCallActivity.class).putExtra("username", user.getMUserName())
+                            .putExtra("isComingCall", false));
+                    // videoCallBtn.setEnabled(false);
                 }
                 break;
         }

@@ -33,7 +33,6 @@ import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
-import com.hyphenate.util.EasyUtils;
 import com.hyphenate.util.PathUtil;
 
 import java.io.File;
@@ -100,19 +99,19 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         }
         super.setUpView();
         // set click listener
-        titleBar.setBackgroundColor(getResources().getColor(R.color.black));
-                titleBar.setLeftLayoutClickListener(new OnClickListener() {
+        titleBar.setLeftLayoutClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if (EasyUtils.isSingleActivity(getActivity())) {
+//                if (EasyUtils.isSingleActivity(getActivity())) {
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     intent.putExtra(I.ACTION_BACK_CONVERSATION,true);
                     startActivity(intent);
-                }
+//                }
                 onBackPressed();
             }
         });
+        titleBar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
         if(chatType == EaseConstant.CHATTYPE_GROUP){
             inputMenu.getPrimaryMenu().getEditText().addTextChangedListener(new TextWatcher() {
@@ -259,10 +258,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     @Override
     public void onAvatarClick(String username) {
         //handling when user click avatar
-//        Intent intent = new Intent(getActivity(), FriendProfileActivity.class);
+//        Intent intent = new Intent(getActivity(), UserProfileActivity.class);
 //        intent.putExtra("username", username);
-        MFGT.gotoFriendProfile(getActivity(),SuperWeChatHelper.getInstance().getAppContactList().get(username));
 //        startActivity(intent);
+        MFGT.gotoFriendProfile(getActivity(),SuperWeChatHelper.getInstance().getAppContactList().get(username));
     }
     
     @Override
