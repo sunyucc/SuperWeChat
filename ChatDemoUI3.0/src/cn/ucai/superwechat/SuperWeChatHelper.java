@@ -1125,7 +1125,7 @@ public class SuperWeChatHelper {
                                userlist.put(user.getMUserName(), user);
                            }
                            // save the contact list to cache
-                           getContactList().clear();
+                           getAppContactList().clear();
                            getAppContactList().putAll(userlist);
                            // save the contact list to database
                            UserDao dao = new UserDao(appContext);

@@ -100,7 +100,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         }
         super.setUpView();
         // set click listener
-        titleBar.setLeftLayoutClickListener(new OnClickListener() {
+        titleBar.setBackgroundColor(getResources().getColor(R.color.black));
+                titleBar.setLeftLayoutClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
